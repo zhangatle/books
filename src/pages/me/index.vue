@@ -65,7 +65,6 @@ export default {
       wx.scanCode({
         success: res => {
           if (res.result) {
-            console.log(res)
             this.addBook(res.result)
           }
         }
