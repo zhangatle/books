@@ -1,11 +1,71 @@
 <template>
-  <p>图书页面</p>
+  <div class="content">
+    <BookList v-for="book in books" :key="book.id" :book="book"></BookList>
+    <p class="text-bottom" v-if="!more">没有更多数据</p>
+  </div>
 </template>
 
 <script>
+import { get } from '@/util'
+import BookList from '@/components/BookList'
 export default {
-  created () {
-    console.log('小程序启动了')
+  components: {
+    BookList
+  },
+  data () {
+    return {
+      books: [],
+      page: 0,
+      more: true,
+      tops: [],
+      bookName: ''
+    }
+  },
+  methods: {
+    async getList (init = false) {
+      if (init) {
+        this.page = 0
+        this.more = true
+      }
+      wx.showNavigationBarLoading()
+      const book = await get('/weapp/booklist', {
+        page: this.page,
+        bookName: this.bookName
+      })
+      if (book.code === 0) {
+        const moreBooks = book.data.list
+        if (moreBooks.length < 10 && this.page > 0) {
+          this.more = false
+        }
+        if (init) {
+          wx.stopPullDownRefresh()
+          this.books = book.data.list
+        } else {
+          this.books = this.books.concat(moreBooks)
+        }
+      }
+      wx.hideNavigationBarLoading()
+    },
+    async getTop () {
+      const tops = await get('/weapp/top')
+      this.tops = tops.data.list
+    }
+  },
+  mounted () {
+    this.getList(true)
+  },
+  onPullDownRefresh () {
+    this.getList(true)
+  },
+  onReachBottom () {
+    // 如果还有更多数据
+    if (this.more) {
+      this.page = this.page + 1
+      wx.showNavigationBarLoading()
+      this.getList()
+      wx.hideNavigationBarLoading()
+    }
+    return false
   }
 }
 </script>
