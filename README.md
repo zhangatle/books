@@ -1,6 +1,6 @@
 # book
 
-> 图书添加分享项目
+> 基于mpvue的图书添加分享小程序项目
 
 ## Build Setup
 

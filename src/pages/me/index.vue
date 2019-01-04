@@ -20,16 +20,14 @@ export default {
   data () {
     return {
       userInfo: {
-        avatarUrl: '../../../static/img/unlogin.png',
-        nickName: 'doge'
+        avatarUrl: '../../static/img/unlogin.png',
+        nickName: '请登录'
       }
     }
   },
   methods: {
     login () {
       const session = qcloud.Session.get()
-      console.log(session)
-      console.log(wx.getStorageSync('userInfo'))
       if (session) {
         qcloud.setLoginUrl(config.loginUrl)
         qcloud.loginWithCode({

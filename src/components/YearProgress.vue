@@ -1,6 +1,6 @@
 <template>
   <div class="yearProgress">
-    <progress :percent="percent" color="#2d9aa1" />
+    <progress :percent="percent" color="#DD4E41" />
     <div><b class="imp">{{year}}</b>已经过去了<b class="imp">{{days}}</b>天，<b class="imp">{{percent}}%</b></div>
   </div>
 </template>
@@ -8,14 +8,6 @@
 <script>
   export default {
     name: 'YearProgress',
-    data () {
-      return {
-        time: null
-      }
-    },
-    methods: {
-      isLeapYear () {}
-    },
     computed: {
       year () {
         return new Date().getFullYear()
@@ -25,7 +17,6 @@
         start.setMonth(0)
         start.setDate(1)
         let offset = new Date().getTime() - start.getTime()
-        this.time = parseInt(offset / 1000 / 60 / 60 / 24) + 1
         return parseInt(offset / 1000 / 60 / 60 / 24) + 1
       },
       percent () {
