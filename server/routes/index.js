@@ -38,6 +38,9 @@ router.post('/addbook', controllers.addbook)
 // 得到图书列表
 router.get('/booklist', controllers.booklist)
 
+// 轮播图数据，访问量排名
+router.get('/top', controllers.top)
+
 // 图书详情
 router.get('/bookdetail', controllers.bookdetail)
 

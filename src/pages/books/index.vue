@@ -1,5 +1,6 @@
 <template>
   <div class="content">
+    <SwiperTop :tops="tops"></SwiperTop>
     <BookList v-for="book in books" :key="book.id" :book="book"></BookList>
     <p class="text-bottom" v-if="!more">没有更多数据</p>
   </div>
@@ -8,9 +9,11 @@
 <script>
 import { get } from '@/util'
 import BookList from '@/components/BookList'
+import SwiperTop from '@/components/SwiperTop'
 export default {
   components: {
-    BookList
+    BookList,
+    SwiperTop
   },
   data () {
     return {
@@ -48,11 +51,13 @@ export default {
     },
     async getTop () {
       const tops = await get('/weapp/top')
+      console.log(tops)
       this.tops = tops.data.list
     }
   },
   mounted () {
     this.getList(true)
+    this.getTop()
   },
   onPullDownRefresh () {
     this.getList(true)
