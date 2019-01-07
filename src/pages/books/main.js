@@ -7,7 +7,7 @@ app.$mount()
 // 这里设置下拉刷新
 export default {
   config: {
-    enablePullDownRefresh: true,
-    onReachBottomDistance: 50
+    'enablePullDownRefresh': true,
+    'onReachBottomDistance': 50
   }
 }
