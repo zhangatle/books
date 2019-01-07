@@ -51,7 +51,6 @@ export default {
     },
     async getTop () {
       const tops = await get('/weapp/top')
-      console.log(tops)
       this.tops = tops.data.list
     }
   },

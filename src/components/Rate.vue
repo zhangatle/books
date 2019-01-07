@@ -1,6 +1,6 @@
 <template>
   <div class="rate">
-    <div class="hide">☆☆☆☆☆</div>
+    <div>☆☆☆☆☆</div>
     <div class="show" :style="style">★★★★★</div>
   </div>
 </template>
@@ -24,12 +24,9 @@
 <style lang="scss" scoped>
   .rate {
     position: relative;
-    font-size: 8px;
+    font-size: 14px;
     display: inline-block;
     vertical-align: top;
-    .hide {
-      visibility: hidden;
-    }
     .show {
       position: absolute;
       display: inline-block;
