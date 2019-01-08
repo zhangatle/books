@@ -5,6 +5,7 @@ const { mysql } = require('../qcloud')
 module.exports = async ctx => {
   const { isbn, openId } = ctx.request.body
   if (isbn && openId) {
+    // 从豆瓣图书获取图书详情
     let url = 'https://api.douban.com/v2/book/isbn/' + isbn
     const bookinfo = await getJson(url)
     // 判断图书是否存在
@@ -42,6 +43,7 @@ module.exports = async ctx => {
   }
 }
 
+// 以流的形式接收数据
 function getJson (url) {
   return new Promise((resolve, reject) => {
     // 返回的是一个流

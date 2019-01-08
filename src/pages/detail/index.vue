@@ -3,7 +3,6 @@
     <BookInfo :info="bookInfo"></BookInfo>
     <Comments :list="commentList" v-if="commentList.length"></Comments>
     <textarea v-model="comment" v-if="showAdd" class="textarea" :maxlength="100" placeholder="请输入对书的评价"></textarea>
-    <div v-else="showAdd" class="showAdd">评论模块暂未开放</div>
     <div class="switch">
       <div class="location">
         地理位置：
@@ -17,6 +16,7 @@
       </div>
     </div>
     <button class="btn" @click="addComment" v-if="showAdd">评论</button>
+    <button class="btn" open-type="share">分享</button>
   </div>
 </template>
 
@@ -41,11 +41,13 @@
       }
     },
     methods: {
+      // 获取评论
       async getComment () {
         // 获取评论列表
         const comments = await get('/weapp/commentList', {bookid: this.bookid})
         this.commentList = comments.data.list || []
       },
+      // 添加评论
       async addComment () {
         const data = {
           comment: this.comment,
@@ -64,6 +66,7 @@
           console.log(e)
         }
       },
+      // 获取当前时间
       getNow () {
         const d = new Date()
         let year = d.getFullYear()
@@ -75,11 +78,13 @@
         let time = `${year}-${arr[0]}-${arr[1]}-${arr[2]}:${arr[3]}`
         return time
       },
+      // 时间格式化
       dateFormate (arr) {
         return arr.map((t) => {
           return String(t).length < 2 ? '0' + t : t
         })
       },
+      // 获取图书详情
       async getDetail () {
         // 发起ajax请求，传递图书Id,后端count加1
         const info = await get('/weapp/bookdetail', {id: this.bookid})
@@ -88,22 +93,28 @@
           title: this.bookinfo.title
         })
       },
+      // 获取手机型号，如果是iPhone机型，则要进行截取
       getPhone (e) {
         if (e.target.value) {
           const phoneInfo = wx.getSystemInfoSync()
-          this.phone = phoneInfo.model
+          console.log(phoneInfo)
+          if (phoneInfo.brand === 'iPhone') {
+            this.phone = phoneInfo.model.split(' (')[0]
+          } else {
+            this.phone = phoneInfo.model
+          }
         } else {
           this.phone = ''
         }
       },
+      // 获取地理位置，需要百度接口，申请ak
       getLoc (e) {
-        const ak = 't4QRSgpPVuta6KdYkrtZp2u3jhnxnarI'
-        const url = 'http://api.map.baidu.com/geocoder/v2/'
+        const ak = 't4QRSgpPVuta6KdYkrtZp2u3jhnxnarI' // 请求ak
+        const url = 'http://api.map.baidu.com/geocoder/v2/' // 请求Url
         const that = this
         if (e.target.value) {
           wx.getLocation({
             success (geo) {
-              console.log(geo)
               wx.request({
                 url,
                 data: {
@@ -113,8 +124,7 @@
                 },
                 success (res) {
                   if (res.data.status === 0) {
-                    console.log(res.data)
-                    that.location = res.data.result.addressComponent.city
+                    that.location = res.data.result.addressComponent.province + res.data.result.addressComponent.city
                   } else {
                     that.location = '未知'
                   }
@@ -141,14 +151,15 @@
         if (!this.userInfo.openId) {
           return false
         }
+        // 一个用户对一本书只允许评论一条
         if (this.commentList.filter(v => v.openid === this.userInfo.openId).length) {
           return false
         }
         return true
       }
     },
-    onShareAppMessage (res) {
-      console.log(res.target)
+    // 用户分享
+    onShareAppMessage () {
       return {
         title: this.bookInfo.title
       }
@@ -161,6 +172,7 @@
     font-size: 14px;
     .textarea {
       margin: 0 auto;
+      padding: 10px 8px;
       width: 94%;
       height: 50px;
       background: #fafafa;
@@ -178,6 +190,10 @@
     .switch {
       margin: 10px auto;
       width: 94%;
+      font-size: 12px;
+      switch {
+        zoom: 0.6;
+      }
       span {
         color: #DD4E41;
       }

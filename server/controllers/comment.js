@@ -1,5 +1,5 @@
 const {mysql} = require('../qcloud')
-
+// 添加评论
 module.exports = async (ctx) => {
   const {bookid, comment, openid, location, phone, time} = ctx.request.body
   if (openid && bookid) {

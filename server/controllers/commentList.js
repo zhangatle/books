@@ -1,5 +1,5 @@
 const {mysql} = require('../qcloud')
-
+// 获取评论列表，根据图书Id或者用户openid
 module.exports = async ctx => {
   const {bookid, openid} = ctx.request.query
   const mysqlSelect = mysql('comments').select('comments.*', 'cSessionInfo.user_info').join('cSessionInfo', 'comments.openid', 'cSessionInfo.open_id')

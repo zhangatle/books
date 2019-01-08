@@ -1,5 +1,5 @@
 const { mysql } = require('../qcloud')
-
+// 获取图书列表
 module.exports = async (ctx) => {
   const {page, openid, bookName} = ctx.request.query
   const size = 10
