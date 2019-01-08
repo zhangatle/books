@@ -8,6 +8,8 @@
 配置文件在config.json中 \
 安装依赖：\
 npm install \
+初始化数据库：
+node tools/initdb.js
 开发环境运行项目: \
 npm run dev
 
